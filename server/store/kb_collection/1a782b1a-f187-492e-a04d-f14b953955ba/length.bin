@@ -1,6 +1,0 @@
-Fig. 3. 
-Image-guided specimen slicing process. The first step is to select a desired slicing plane 
-orientation and location from the 3D in vivo image. By using image-based registration, this 
-plane is transformed to the space of the ex vivo specimen image. Corresponding fiducial 
-markers are localized on the ex vivo image (by using software) and on the physical specimen 
-script", expected a bool
