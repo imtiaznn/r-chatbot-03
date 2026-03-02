@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "r-chatbot-03"
+version = "0.1.0"
+description = "RAG Chatbot for use in Cytovision's Website"
+authors = ["imtiaz <imtyaz.n96@gmail.com>"]
+readme = "README.md"
+packages = [
+    {include="scripts", from="server"}
+]
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.13"
+fastapi = {extras = ["standard"], version = "^0.133.0"}
+chromadb = "^1.5.1"
+langchain-text-splitters = "^1.1.1"
+uvicorn = "^0.41.0"
+python-socketio = "^5.16.1"
+sentence-transformers = "^5.2.3"
+langchain = "^1.2.10"
+langchain-huggingface = "^1.2.0"
+langchain-chroma = "^1.1.0"
+langchain-community = "^0.4.1"
+pypdf = "^6.7.3"
+langchain-openai = "^1.1.10"
+langgraph = "^1.0.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

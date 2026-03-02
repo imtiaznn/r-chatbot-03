@@ -1,0 +1,630 @@
+* { 
+  border-width: 0px;
+}
+
+:root {
+  --font-family: "Lato", sans-serif;
+
+  --font-size: 18px;
+  --line-height: 26px;
+  --font-weight: 500;
+  --bold-font-weight: 700;
+  --text-transform: none;
+  --font-style: normal;
+  --letter-spacing: 0em;
+  --h1-font-family: Exo, sans-serif;
+  --h1-font-size: calc(32px + 2vw);
+  --h1-line-height: 1.2;
+  --h1-font-weight: 600;
+  --h1-bold-font-weight: 700;
+  --h1-text-transform: none;
+  --h1-font-style: normal;
+  --h1-letter-spacing: 0em;
+  --h1-margin-bottom: 1.5rem;
+  --h2-font-family: var(--h1-font-family);
+  --h2-font-size: calc(22px + 1.3vw);
+  --h2-line-height: 1.2;
+  --h2-font-weight: var(--h1-font-weight);
+  --h2-bold-font-weight: var(--h1-bold-font-weight);
+  --h2-text-transform: var(--h1-text-transform);
+  --h2-font-style: var(--h1-font-style);
+  --h2-letter-spacing: 0em;
+  --h2-margin-bottom: 1.5rem;
+  --h3-font-family: var(--h1-font-family);
+  --h3-font-size: calc(19px + 1vw);
+  --h3-line-height: 1.2;
+  --h3-font-weight: var(--h1-font-weight);
+  --h3-bold-font-weight: var(--h1-bold-font-weight);
+  --h3-text-transform: var(--h1-text-transform);
+  --h3-font-style: var(--h1-font-style);
+  --h3-letter-spacing: 0em;
+  --h3-margin-bottom: 1.5rem;
+  --h4-font-family: var(--h1-font-family);
+  --h4-font-size: calc(17px + 0.9vw);
+  --h4-line-height: 1.2;
+  --h4-font-weight: var(--h1-font-weight);
+  --h4-bold-font-weight: var(--h1-bold-font-weight);
+  --h4-text-transform: var(--h1-text-transform);
+  --h4-font-style: var(--h1-font-style);
+  --h4-letter-spacing: 0em;
+  --h4-margin-bottom: 1.5rem;
+  --h5-font-family: var(--h1-font-family);
+  --h5-font-size: calc(16px + 0.8vw);
+  --h5-line-height: 1.2;
+  --h5-font-weight: var(--h1-font-weight);
+  --h5-bold-font-weight: var(--h1-bold-font-weight);
+  --h5-text-transform: var(--h1-text-transform);
+  --h5-font-style: var(--h1-font-style);
+  --h5-letter-spacing: 0em;
+  --h5-margin-bottom: 1.5rem;
+  --h6-font-family: var(--h1-font-family);
+  --h6-font-size: calc(15px + 0.8vw);
+  --h6-line-height: 1.2;
+  --h6-font-weight: var(--h1-font-weight);
+  --h6-bold-font-weight: var(--h1-bold-font-weight);
+  --h6-text-transform: var(--h1-text-transform);
+  --h6-font-style: var(--h1-font-style);
+  --h6-letter-spacing: 0em;
+  --h6-margin-bottom: 1.5rem
+}
+
+h1 {
+  font-family: var(--h1-font-family, inherit);
+  font-weight: var(--h1-font-weight, inherit);
+  font-size: var(--h1-font-size, inherit);
+  font-style: var(--h1-font-style, inherit);
+  line-height: var(--h1-line-height, 1.4);
+  letter-spacing: var(--h1-letter-spacing, inherit);
+  text-transform: var(--h1-text-transform, inherit);
+  margin-bottom: var(--h1-margin-bottom, 1.5rem)
+}
+
+h1>strong {
+  font-weight: var(--h1-bold-font-weight, bold)
+}
+
+h2 {
+  font-family: var(--h2-font-family, inherit);
+  font-weight: var(--h2-font-weight, inherit);
+  font-size: var(--h2-font-size, inherit);
+  font-style: var(--h2-font-style, inherit);
+  line-height: var(--h2-line-height, 1.4);
+  letter-spacing: var(--h2-letter-spacing, inherit);
+  text-transform: var(--h2-text-transform, inherit);
+  margin-bottom: var(--h2-margin-bottom, 1.5rem)
+}
+
+h2>strong {
+  font-weight: var(--h2-bold-font-weight, bold)
+}
+
+h3 {
+  font-family: var(--h3-font-family, inherit);
+  font-weight: var(--h3-font-weight, inherit);
+  font-size: var(--h3-font-size, inherit);
+  font-style: var(--h3-font-style, inherit);
+  line-height: var(--h3-line-height, 1.4);
+  letter-spacing: var(--h3-letter-spacing, inherit);
+  text-transform: var(--h3-text-transform, inherit);
+  margin-bottom: var(--h3-margin-bottom, 1.5rem)
+}
+
+h3>strong {
+  font-weight: var(--h3-bold-font-weight, bold)
+}
+
+h4 {
+  font-family: var(--h4-font-family, inherit);
+  font-weight: var(--h4-font-weight, inherit);
+  font-size: var(--h4-font-size, inherit);
+  font-style: var(--h4-font-style, inherit);
+  line-height: var(--h4-line-height, 1.4);
+  letter-spacing: var(--h4-letter-spacing, inherit);
+  text-transform: var(--h4-text-transform, inherit);
+  margin-bottom: var(--h4-margin-bottom, 1.5rem)
+}
+
+h4>strong {
+  font-weight: var(--h4-bold-font-weight, bold)
+}
+
+h5 {
+  font-family: var(--h5-font-family, inherit);
+  font-weight: var(--h5-font-weight, inherit);
+  font-size: var(--h5-font-size, inherit);
+  font-style: var(--h5-font-style, inherit);
+  line-height: var(--h5-line-height, 1.4);
+  letter-spacing: var(--h5-letter-spacing, inherit);
+  text-transform: var(--h5-text-transform, inherit);
+  margin-bottom: var(--h5-margin-bottom, 1.5rem)
+}
+
+h5>strong {
+  font-weight: var(--h5-bold-font-weight, bold)
+}
+
+h6 {
+  font-family: var(--h6-font-family, inherit);
+  font-weight: var(--h6-font-weight, inherit);
+  font-size: var(--h6-font-size, inherit);
+  font-style: var(--h6-font-style, inherit);
+  line-height: var(--h6-line-height, 1.4);
+  letter-spacing: var(--h6-letter-spacing, inherit);
+  text-transform: var(--h6-text-transform, inherit);
+  margin-bottom: var(--h6-margin-bottom, 1.5rem)
+}
+
+h6>strong {
+  font-weight: var(--h6-bold-font-weight, bold)
+}
+
+input:focus,
+textarea:focus,
+select:focus { 
+  border-width: 0px;
+  outline: none;
+  box-shadow: none;
+}
+
+/* Styles */
+.chatbot-container {
+  width: 4rem;          /* initial size (just fits the icon) */  
+  display: flex;
+  align-items: center;
+  background-image: linear-gradient(to bottom left, #3d92c6, #9ed9ee);
+  border-radius: 9999px;    /* auto-round the ends */
+  padding: 0.25rem;
+  margin: 0.5rem;
+  overflow: hidden;
+  transition: width 0.5s ease; /* smooth expansion */
+  cursor: pointer;
+
+  /* fixed at bottom-left */
+  position: fixed;
+  bottom: 20px;   /* distance from bottom of page */
+  left: 20px;     /* distance from left of page */
+  z-index: 1000;  /* make sure it stays above other elements */
+}
+
+#chatbot-logo {
+  width: 2.9rem;
+  height: auto;
+  display: block;
+}
+
+#chatbot-icon {
+  background-color: transparent;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-width: 0px;
+}
+
+#chatbot-msg {
+  color: #fff;
+  font-size: 20px;
+  font-family: "Exo", sans-serif;
+  font-weight: 600;
+  white-space: nowrap;
+  margin: 0 0.5em;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* hover expansion */
+.chatbot-container:hover {
+  width: 210px; /* expanded width */
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.chatbot-container:hover #chatbot-msg {
+  opacity: 1;
+}
+
+/* Chatbox design */
+/* Chatbox panel (hidden by default) */
+.chatbox {
+  position: fixed;
+  bottom: 120px; /* sits above the chat bubble */
+  left: 40px;
+  width: 400px;
+  height: 450px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  
+  overflow: hidden;
+  transform: translateX(-120%); /* hidden to the left */
+  opacity: 0;
+  transition: all 0.4s ease;
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+
+  overflow: auto;
+  max-width: 90vw;
+
+  transition: all 0.3s ease-in-out;
+}
+
+/* When active */
+.chatbox.active {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* Chatbox header */
+.chatbox-header {
+  background-image: linear-gradient(to right, #5388dd, #45a6d7, #7cc0e2);
+  color: #fff;
+  padding: 0.5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: "Exo", sans-serif;
+}
+
+#logo-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.chatbox-header-buttons {
+  display: flex;
+  align-items: center;
+  gap: 6px; /* small spacing between resize & close */
+}
+
+/* Header buttons */
+.chatbox-header button {
+  background-color: transparent;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.chatbox-header button img, .chatbox-header img{
+  width: 20px;
+  height: 20px;
+  display: block;
+  transition: transform 0.2s ease, filter 0.2s ease;
+}
+
+#close-btn {
+  width: 15px;
+  height: 15px;
+}
+
+#close-btn:hover, #resize-btn:hover {
+  filter: drop-shadow(0 0 6px rgba(0, 0, 0, 0.4));
+  transform: scale(1.05);
+}
+
+/* Chat content */
+#chatbox-body {
+  flex: 1;
+  padding: 10px 10px 60px 10px;
+  overflow-y: auto;
+  font-size: 14px;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+}
+
+.chatbot-msg-box {
+  background-color: #dff0ff;
+  padding: 0.5em 0.8em;
+  border-radius: 10px;
+  /* max-height: 100%; */
+  min-width: max-content;
+  width: 80%;
+
+  border-radius: 10px 10px 10px 0px;
+}
+
+.chatbot-msg-box p{
+  margin: 0;
+}
+
+.chatbot-time {
+  font-size: 14px;
+  font-weight: 600;
+  color: #3173b9;
+}
+
+/* FAQ section */
+#faq-section {
+  height: fit-content;
+  margin: 0.5em 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.faq-container {
+  width: 100%;
+  overflow: hidden;     /* keep to clip off-screen slides */
+  position: relative;
+  /* allow height to grow to fit content instead of forcing a small min height */
+  height: auto;
+  transition: height 0.35s ease;
+}
+
+/* Use transform-based sliding so the container can size to content */
+.faq-screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translateX(100%);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  transition: transform 0.45s ease;
+  will-change: transform;
+  box-sizing: border-box;
+}
+
+/* Main screen active on load */
+.faq-screen.active {
+  transform: translateX(0);
+}
+
+.faq-screen.slide-left {
+  transform: translateX(-100%);
+}
+
+
+.faq-screen.slide-in {
+  left: 0;
+}
+
+.faq-btn {
+  text-align: left;
+  background-color: #fff;
+  color: #1a4f87;
+  border: 1.5px solid #1a4f87;
+  border-radius: 15px;
+
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 8px;
+
+  width: 80%;
+}
+
+.faq-btn img {
+  width: 15px;
+  height: 15px;
+}
+
+.faq-btn:hover, .back-btn:hover {
+  color: #fff;
+  background-color: #2c68a7;
+  transition: filter 0.4s ease, transform 0.4s ease;
+}
+
+.faq-btn:hover img, .back-btn:hover img, .send-btn:hover img {
+  filter: brightness(0) invert(1); 
+}
+
+.back-btn {
+  max-width: fit-content;
+  padding: 5px 10px;
+  border-radius: 50px;
+  border: 1.5px solid #1a4f87;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-btn img {
+  width: 15px;
+  height: 15px;
+} 
+
+/* Input area */
+#input-send {
+  background-color: #fff;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+}
+.chatbox-input {
+  position: relative;  
+  height: 45px;
+  padding: 0 8px;
+  display: flex;
+  align-items: center;
+  border: 0.5px solid #ebebeb;
+  border-radius: 9999px;
+  background-color: #f3f3f3;
+}
+
+#user-input {
+  flex: 1;
+  color: #323232 !important;
+  border: none;
+  padding: 0 8px;
+  font-size: 14px;
+  background-color: transparent;
+}
+
+.chatbox-input input::placeholder {
+  color: #898989;
+}
+
+.send-btn {
+  background-color: transparent;
+  width: 30px;
+  height: 30px;
+  padding: 2px 2px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+  transition: background-color 0.2s ease;
+}
+
+.send-btn img {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.send-btn:hover {
+  background-color: #70b8e5;
+}
+
+/* container for all dynamic messages */
+#chat-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.user-bubble {
+  background: #eeeeee;
+  padding: 8px 12px;
+  border-radius: 10px;
+  max-width: 80%;
+  width: auto;
+  align-self: flex-end;
+
+  /* wrapping words */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+
+  border-radius: 10px 10px 0px 10px;
+}
+
+.chatbot-bubble {
+  background: #dff0ff;
+  padding: 8px 12px;
+  border-radius: 10px;
+  max-width: 80%;
+  width: auto;
+  align-self: flex-start;
+
+  /* wrapping words */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+
+  border-radius: 10px 10px 10px 0px;
+}
+
+/* typing bubble stays left like bot */
+#thinking-bubble {
+  align-self: flex-start;
+}
+
+/* Thinking bubble */
+.typing-indicator {
+  display: inline-flex;
+  gap: 4px;
+  margin: 10px 0;
+  padding: 8px 12px;
+  background: #dff0ff;
+  border-radius: 20px;
+  align-items: center;
+  width: max-content;
+  height: 30px;
+}
+
+.typing-indicator span {
+  width: 6px;
+  height: 6px;
+  background: #3d92c6;
+  border-radius: 50%;
+  display: block;
+  animation: blink 1.4s infinite both;
+}
+
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes blink {
+  0% { opacity: 0.2; transform: translateY(0); }
+  20% { opacity: 1; transform: translateY(-3px); }
+  100% { opacity: 0.2; transform: translateY(0); }
+}
+
+
+/* === Responsive Adjustments === */
+/* medium screens (half screen / tablets) */
+@media (max-width: 900px) {
+  .chatbox {
+    min-width: 320px;
+    max-width: 90vw;
+    min-height: 380px;
+    max-height: 70vh;
+    left: 20px;
+    bottom: 100px;
+  }
+
+  .chatbot-container {
+    width: 60px;
+    margin: 8px;
+  }
+
+  .chatbot-container:hover {
+    width: 160px;
+  }
+
+  #chatbot-logo {
+    width: 40px;
+  }
+
+  #chatbot-msg {
+    font-size: 13px;
+  }
+}
+
+/* small screens (phones / narrow windows) */
+@media (max-width: 600px) {
+  .chatbox {
+    min-width: 250px;
+    max-width: 85vw;
+    min-height: 320px;
+    max-height: 60vh;
+    left: 10px;
+    bottom: 90px;
+  }
+
+  .chatbot-container {
+    width: 55px;
+    margin: 5px;
+    padding: 4px;
+  }
+
+  .chatbot-container:hover {
+    width: 140px;
+  }
+
+  #chatbot-logo {
+    width: 35px;
+  }
+
+  #chatbot-msg {
+    font-size: 12px;
+  }
+}

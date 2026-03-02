@@ -1,0 +1,226 @@
+faqs:
+# --- General ---
+  - id: faq_001
+    category: general
+    answer: "Digital pathology is the practice of digitizing glass slides and using computer technology to view, manage, and analyze the resulting digital images. It allows pathologists to work with high-resolution images on a computer screen instead of using a traditional microscope."
+    questions:
+      - "What is digital pathology?"
+      - "Can you explain what digital pathology is?"
+      - "What does digital pathology involve?"
+      - "How does digital pathology differ from traditional pathology?"
+      - "What are the benefits of digital pathology?"
+
+  - id: faq_002
+    category: general
+    answer: "Whole Slide Imaging (WSI) is a technology that allows for the scanning of entire glass slides at high resolution, creating a digital image that can be viewed and analyzed on a computer. Digital microscopy, on the other hand, typically involves capturing specific fields of view or 'snapshots' rather than the entire slide."
+    questions:
+      - "What is whole slide imaging?"
+      - "How does whole slide imaging differ from digital microscopy?"
+      - "Can you explain the difference between WSI and digital microscopy?"
+      - "What are the advantages of whole slide imaging over digital microscopy?"
+      - "Is whole slide imaging more effective than digital microscopy?"
+
+  - id: faq_003
+    category: general
+    answer: "To view slides effectively, you need a high-resolution medical-grade monitor (ideally 4K) and a stable high-speed internet connection. On the software side, an Image Management System (IMS) or a web-based DICOM viewer is required to render the large image files smoothly."
+    questions:
+      - "What special hardware or software is needed to view digital slides?"
+      - "Can you give a brief description of the hardware and software requirements for viewing digital slides?"
+      - "What are the technical requirements for viewing digital pathology slides?"
+      - "Do I need any special equipment to view digital slides?"
+      - "What kind of monitor and software do I need to view digital slides?"
+
+  - id: faq_004
+    category: general
+    answer: "Yes, data security is a priority. Systems typically use end-to-end encryption, HIPAA-compliant cloud or on-premise storage, and multi-factor authentication (MFA) to ensure that patient information and diagnostic data remain confidential and protected from unauthorized access."
+    questions:
+      - "Explain whether user data is safe when using digital pathology systems"
+      - "Is user data secure when using digital pathology systems?"
+      - "How do digital pathology systems ensure the safety of user data?"
+      - "What measures are in place to protect user data in digital pathology systems?"
+      - "Are there any security risks associated with using digital pathology systems?"
+
+  - id: faq_005
+    category: general
+    answer: "The turnaround time for digital pathology can vary based on the specific workflow and infrastructure in place. However, many labs report that digital pathology can reduce turnaround times by 20-30% compared to traditional microscopy, primarily due to faster slide scanning, easier access to images, and streamlined collaboration."
+    questions:
+      - "How long does it typically take to get results from a digital pathology system?"
+      - "What is the average turnaround time for digital pathology results?"
+      - "Can you provide an estimate of how long it takes to receive results from a digital pathology system?"
+      - "Does digital pathology speed up the diagnostic process compared to traditional methods?"
+      - "What factors influence the turnaround time for digital pathology results?"
+
+# --- Products & Services ---
+  - id: faq_006
+    category: products_services
+    answer: "Our company provides a comprehensive digital pathology solution that includes high-quality whole slide scanners, a cloud-based image management system, and AI-powered analysis tools. We also offer consulting services to help labs transition from traditional microscopy to digital workflows."
+    questions:
+      - "What products and services does your company offer in the field of digital pathology?"
+      - "Can you describe the range of products and services your company provides for digital pathology?"
+      - "What solutions does your company offer to support digital pathology workflows?"
+      - "Do you provide both hardware and software solutions for digital pathology?"
+      - "What kind of consulting services do you offer for labs transitioning to digital pathology?"
+
+  - id: faq_007
+    category: products_services
+    answer: "Our AI-assisted screening capabilities include algorithms for tumor detection, cell counting, and pattern recognition. These tools can help pathologists identify areas of interest more quickly and accurately, ultimately improving diagnostic efficiency and consistency."
+    questions:
+      - "What AI-assisted screening capabilities does your company offer?"
+      - "Can you explain the AI-assisted screening features available in your digital pathology solutions?"
+      - "How do your AI tools enhance the screening process in digital pathology?"
+      - "What specific tasks can your AI algorithms assist with in digital pathology?"
+      - "How does AI improve the accuracy and efficiency of digital pathology screening?"
+
+  - id: faq_008
+    category: products_services
+    answer: "Our digital pathology solutions are designed to integrate seamlessly with existing laboratory information systems (LIS) and electronic health records (EHR). We use standard APIs and data formats to ensure compatibility and facilitate smooth data exchange between systems."
+    questions:
+      - "How do your digital pathology solutions integrate with existing laboratory information systems (LIS) or electronic health records (EHR)?"
+      - "Can you describe the integration capabilities of your digital pathology solutions with LIS and EHR systems?"
+      - "What steps are involved in integrating your digital pathology solutions with existing LIS or EHR systems?"
+      - "Do your digital pathology solutions support standard APIs for integration with LIS and EHR?"
+      - "How does your company ensure seamless data exchange between digital pathology solutions and existing LIS/EHR systems?"
+
+  - id: faq_009
+    category: products_services
+    answer: "Yes, we offer a suite of deep-learning algorithms specifically designed for immunohistochemistry (IHC) quantification, nuclear segmentation, and rare event detection, helping to standardize results that are often subjective in manual microscopy."
+    questions:
+      - "Does your company have AI tools to assist in image analysis for digital pathology?"
+      - "Can you explain the AI tools your company offers for image analysis in digital pathology?"
+      - "What specific AI algorithms do you provide for digital pathology image analysis?"
+      - "How do your AI tools help with image analysis in digital pathology?"
+      - "Are there any AI features that assist with quantification or segmentation in digital pathology?"
+
+  - id: faq_010
+    category: products_services
+    answer: "Our company provides comprehensive training and support for all our digital pathology products. This includes on-site training sessions, online webinars, detailed user manuals, and a dedicated support team available via email and phone to assist with any technical issues or questions."
+    questions:
+      - "What kind of training and support does your company provide for your digital pathology products?"
+      - "Can you describe the training resources available for users of your digital pathology products?"
+      - "How does your company support customers who are using your digital pathology solutions?"
+      - "Do you offer on-site training or online resources for learning how to use your digital pathology products?"
+      - "What is the process for getting technical support if I have issues with your digital pathology products?"
+
+# --- Pricing ---
+  - id: faq_011
+    category: pricing
+    answer: "Our pricing is primarily based on a subscription model (SaaS). The main billing factors include the number of active user seats, the volume of data stored in our cloud, and the specific AI analysis modules selected for your workflow."
+    questions:
+      - "Describe the pricing model and main billing factors"
+      - "Can you explain your pricing model and what factors influence the billing?"
+      - "What is your pricing structure for digital pathology solutions?"
+      - "How do you determine the cost for your digital pathology products and services?"
+      - "What are the main components that contribute to the overall cost of your digital pathology solutions?"
+
+  - id: faq_012
+    category: pricing
+    answer: "Standard pricing covers technical support and system maintenance. Clinical consultation services from our network of board-certified pathologists are available as a professional service add-on or on a per-case basis."
+    questions:
+      - "Does the pricing include expert consultation services?"
+      - "Are expert consultation services included in your pricing?"
+      - "What is included in your standard pricing for digital pathology solutions?"
+      - "Do you offer clinical consultation services as part of your digital pathology offerings?"
+      - "How are expert consultation services billed if they are not included in the standard pricing?"
+
+  - id: faq_013
+    category: pricing
+    answer: "We offer tiered pricing for high-volume laboratories and significant discounts for multi-year contract commitments. We also provide special pricing structures for academic and research institutions."
+    questions:
+      - "Explain discounts for long-term contracts or volume pricing"
+      - "Do you offer discounts for long-term contracts or high-volume usage?"
+      - "What kind of discounts are available for laboratories that commit to long-term contracts or have high usage volumes?"
+      - "Are there any special pricing options for academic or research institutions?"
+      - "How does your company incentivize larger commitments or higher usage with your digital pathology solutions?"
+
+  - id: faq_014
+    category: pricing
+    answer: "Yes, we provide flexible payment options including monthly and annual billing cycles. Annual subscriptions typically come with a discount compared to monthly payments, and we also offer custom billing arrangements for enterprise clients."
+    questions:
+      - "Do you offer flexible payment options such as monthly or annual billing?"
+      - "Can customers choose between monthly and annual billing for your digital pathology solutions?"
+      - "What are the benefits of choosing annual billing over monthly billing for your digital pathology products?"
+      - "Are there any discounts associated with choosing an annual subscription for your digital pathology solutions?"
+      - "Do you provide custom billing arrangements for enterprise clients?"
+
+  - id: faq_015
+    category: pricing
+    answer: "We accept all major credit cards, ACH transfers, and bank wire transfers. For hospital systems and universities, we also support standardized Purchase Order (PO) invoicing with Net-30 terms."
+    questions:
+      - "What payment methods does your company accept?"
+      - "Can you explain the payment options available for your digital pathology solutions?"
+      - "What forms of payment do you accept for your products and services?"
+      - "Do you offer invoicing options for institutional clients such as hospitals and universities?"
+      - "Are there any specific payment terms or methods that are preferred for enterprise clients?"
+
+# --- Troubleshooting ---
+  - id: faq_016
+    category: troubleshooting
+    answer: "If you encounter technical issues, the first step is to consult our online knowledge base and user manuals. If the issue persists, you can submit a support ticket through our helpdesk portal, where our technical team will respond within 24 hours. For urgent issues, Enterprise clients can use the priority phone line provided in their SLA."
+    questions:
+      - "What should I do if I encounter technical issues with your digital pathology products?"
+      - "Can you explain the steps to take if I experience technical problems with your digital pathology solutions?"
+      - "How do I get support if I have a technical issue with your products?"
+      - "Is there a specific process for reporting technical issues with your digital pathology solutions?"
+      - "What is the expected response time for technical support inquiries?"
+
+  - id: faq_017
+    category: troubleshooting
+    answer: "Common issues with digital pathology systems include slow image loading, compatibility problems with certain browsers, and occasional upload failures. We recommend using the latest version of Chrome or Firefox for optimal performance and ensuring that your system meets the minimum hardware requirements."
+    questions:
+      - "What are some common issues users might face with digital pathology systems?"
+      - "Can you describe some typical technical problems that may arise when using digital pathology solutions?"
+      - "What are the most frequently reported issues with digital pathology systems?"
+      - "How can users troubleshoot common problems with digital pathology solutions?"
+      - "Are there any known compatibility issues with certain browsers or operating systems?"
+
+  - id: faq_018
+    category: troubleshooting
+    answer: "If you experience slow performance, it may be due to network latency or insufficient hardware resources. Try closing other applications to free up system resources, and ensure you have a stable internet connection. If the issue persists, please contact our support team for further assistance."
+    questions:
+      - "What should I do if I experience slow performance with your digital pathology solutions?"
+      - "Can you provide troubleshooting steps for slow performance issues with your digital pathology products?"
+      - "How can I improve the performance of your digital pathology solutions if they are running slowly?"
+      - "Are there any specific settings or configurations that can help enhance the performance of your digital pathology systems?"
+      - "What are the common causes of slow performance in digital pathology solutions, and how can they be addressed?"
+
+  - id: faq_019
+    category: troubleshooting
+    answer: "If you encounter an error message, take a screenshot of the error and note the exact steps that led to it. This information will be crucial for our support team to diagnose and resolve the issue efficiently. You can submit this information through our helpdesk portal or via email."
+    questions:
+      - "What should I do if I encounter an error message while using your digital pathology solutions?"
+      - "Can you explain the steps to take if I see an error message when using your products?"
+      - "How can I report an error message to your support team for resolution?"
+      - "What information should I provide when reporting an error message with your digital pathology solutions?"
+      - "Is there a specific process for submitting error reports to your technical support team?"
+
+  - id: faq_020
+    category: troubleshooting
+    answer: "If you are unable to log in, first ensure that you are using the correct username and password. If you have forgotten your password, use the 'Forgot Password' feature to reset it. If you continue to experience login issues, please contact our support team for assistance."
+    questions:
+      - "What should I do if I am unable to log in to your digital pathology system?"
+      - "Can you provide troubleshooting steps for login issues with your digital pathology solutions?"
+      - "How can I reset my password if I am having trouble logging in to your system?"
+      - "What are the common causes of login problems with your digital pathology solutions, and how can they be resolved?"
+      - "Is there a specific process for recovering access if I am locked out of my account?"
+
+# --- Contact ---
+  - id: faq_021
+    category: contact
+    answer: "You can contact our sales team for inquiries about our digital pathology solutions by emailing us or calling our sales office."
+    questions:
+      - "How can I contact your sales team for more information about your digital pathology solutions?"
+      - "What is the best way to get in touch with your sales department?"
+      - "Is there a specific email address I should use to reach your sales team?"
+      - "Can I call your sales office to inquire about your digital pathology products?"
+      - "What are the contact details for your sales team regarding digital pathology solutions?"
+
+  - id: faq_022
+    category: contact
+    answer: "For technical support, please submit a ticket through our helpdesk portal at support.cytovision.com. Our technical team will respond within 24 hours to assist you with any issues you may be experiencing."
+    questions:
+      - "How can I contact your technical support team for assistance with your digital pathology products?"
+      - "What is the process for getting technical support for your digital pathology solutions?"
+      - "Is there a specific website or portal I should use to submit a support request?"
+      - "What is the expected response time when I contact your technical support team?"
+      - "Can I reach your technical support team via email or phone for urgent issues?"
+  
