@@ -4,7 +4,6 @@ from langchain_openai import ChatOpenAI
 from langchain.agents import create_agent
 
 from langgraph.checkpoint.memory import InMemorySaver
-from langgraph.graph import StateGraph
 
 from scripts import get_embeddings
 from app.retriever import faq_retriever, prompt_with_context
@@ -26,7 +25,7 @@ model = ChatOpenAI(
 embeddings = get_embeddings()
 agent = create_agent(
     model, 
-    tools=[], 
+    tools=[],
     middleware=[prompt_with_context],
     checkpointer=checkpointer
 )

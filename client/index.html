@@ -1,127 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
- 	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Cytovision Chatbot</title>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cytovision AI Chatbot</title>
+  </head>
 
-	<!-- Styles -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Exo:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-	
-	<link rel="stylesheet" href="styles.css">
-	<link rel="stylesheet" href="assets/fonts.css">
-	<link rel="stylesheet" href="assets/style.min.css">
-	
-	<!-- Fonts -->
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
-	
-	<!-- Scripts -->
-	<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-	<script src="ui-controller.js" defer></script>
-	<script src="chat-service.js" defer></script>
-
-</head>
-
-<body>
-
-	<!-- Floating Chatbox -->
-	<div class="chatbot-container" id="chatbot-toggle">
-		<!-- Floating Chat Button -->
-		<button id="chatbot-icon"><img src="./assets/cytovision-logo-white.png" id="chatbot-logo"/></button>
-		<span id="chatbot-msg">Chat with Us!</span>		
-	</div>
-
-	<!-- Chatbox Panel -->
-	<div class="chatbox" id="chatbox">
-		<div class="chatbox-header">
-			<div id="logo-name">
-				<img src="./assets/chatbot-icon.png"/> 
-				<span>Cytovision Chatbot</span>
-			</div>
-			<div class="chatbox-header-buttons">
-				<button id="chatbox-resize"><img src="./assets/expand.png" id="resize-btn" alt="resize"></button>
-				<button id="chatbox-close"><img src="./assets/close.png" id="close-btn" alt="close"></button>
-			</div>
-		</div>
-		<div id="chatbox-body">
-			<!-- Initial greeting message -->
-			<div class="chatbot-msg-box">
-				<p class="chatbot-time">Cytovision Chatbot, 2:30 pm</p>	<!-- example time -->
-				<p>Hi there! What can we help you today?</p>
-				<div id="faq-section">
-					<p><b>Frequently Asked Questions (FAQs):</b></p>
-					<div class="faq-container">
-						<!-- Main faq screen -->
-						<div class="faq-screen active" id="main-faq">
-							<button class="faq-btn" onclick="openGeneral()"><img src ="./assets/info.png"/>General</button>
-							<button class="faq-btn" onclick="openP_S()"><img src ="./assets/plugin.png"/>Products & Services</button>
-							<button class="faq-btn" onclick="openPricing()"><img src ="./assets/circle_price.png"/>Pricing</button>
-							<button class="faq-btn" onclick="openTS()"><img src ="./assets/troubleshoot.png"/>Troubleshooting</button>
-							<button class="faq-btn" onclick="openContact()"><img src ="./assets/contact_us.png"/>Contact Us</button>
-						</div>
-						<!-- General faq screen -->
-						<div class="faq-screen" id="general-faq">
-								<button class="back-btn" onclick="goBack()"><img src="./assets/arrow-left.png" /></button>
-								<button class="faq-btn" onclick="">What is digital pathology?</button>
-								<button class="faq-btn" onclick="">What is Whole Sliding Image (WSI)? </button>
-								<button class="faq-btn" onclick="">Operating hours?</button>
-								<button class="faq-btn" onclick="">Are my chats recorded?</button>
-						</div>
-						<!-- Products & services faq screen -->
-						 <div class="faq-screen" id="ps-faq">
-								<button class="back-btn" onclick="goBack()"><img src="./assets/arrow-left.png" /></button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-						</div>
-						<!-- Pricing faq screen -->
-						 <div class="faq-screen" id="pricing-faq">
-								<button class="back-btn" onclick="goBack()"><img src="./assets/arrow-left.png" /></button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-						</div>
-						<!-- Troubleshooting faq screen -->
-						 <div class="faq-screen" id="ts-faq">
-								<button class="back-btn" onclick="goBack()"><img src="./assets/arrow-left.png" /></button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-						</div>
-						<!-- Contact us faq screen -->
-						 <div class="faq-screen" id="contact-faq">
-								<button class="back-btn" onclick="goBack()"><img src="./assets/arrow-left.png" /></button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-								<button class="faq-btn" onclick="">...?</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!-- new messages (proper convo between user & chatbot) -->
-			<div id="chat-messages"></div>
-			<!-- Thinking... bubble -->
-			 <div id="thinking-bubble" class="typing-indicator" style="display:none;">
-				<span></span><span></span><span></span>
-			</div>
-			
-		</div>
-		<div id="input-send">
-			<div class="chatbox-input">
-				<input type="text" placeholder="Tell us what you're thinking..." id="user-input"/>
-				<button class="send-btn"><img src="./assets/send.png" id="send-btn"/></button>
-			</div>
-		</div>
-	</div>
-
-</body>
-
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

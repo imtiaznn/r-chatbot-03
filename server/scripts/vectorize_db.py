@@ -11,14 +11,10 @@ from langchain_core.documents import Document
 from pathlib import Path
 
 # CLI Arguments
-parser = argparse.ArgumentParser()
-parser.add_argument("--vectorize-faq", action="store_true", help="Vectorize FAQ data")
-parser.add_argument("--vectorize-kb", action="store_true", help="Vectorize knowledge base data")
-args = parser.parse_args()
-
 BASE_DIR = Path(__file__).resolve().parent.parent
-VECTORIZE_FAQ = args.vectorize_faq
-VECTORIZE_KB = args.vectorize_kb
+# Defaults when imported as a module
+VECTORIZE_FAQ = False
+VECTORIZE_KB = False
 
 input_faq_file = BASE_DIR / "store" / "faq.yml"
 output_faq_dir = BASE_DIR / "store" / "faq_collection"
@@ -105,6 +101,15 @@ def vectorize_kb(kb_collection, text_splitter, input_kb_dir):
     return all_chunks
 
 if __name__ == "__main__":
+
+    # Parse CLI args only when run as a script (avoid running on import)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--vectorize-faq", action="store_true", help="Vectorize FAQ data")
+    parser.add_argument("--vectorize-kb", action="store_true", help="Vectorize knowledge base data")
+    args = parser.parse_args()
+
+    VECTORIZE_FAQ = args.vectorize_faq
+    VECTORIZE_KB = args.vectorize_kb
 
     # Delete existing FAQ collection if it exists
     if os.path.exists(output_faq_dir):
