@@ -5,6 +5,7 @@ import logo from "../../assets/cytovision-logo-white.png"
 import ChatBoxHeader from "./ChatBoxHeader";
 import ChatBoxBody, { type Message } from "./ChatBoxBody";
 import ChatBoxInput from "./ChatBoxInput";
+import ChatBoxOverlay from "./ChatBoxOverlay";
 
 import "./ChatBox.css";
 
@@ -13,6 +14,7 @@ const ChatBox = () => {
   
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [userInfo, setUserInfo] = useState<{ name: string; email: string } | null>(null);
 
   const socket = useRef<Socket | null>(null)
 
@@ -43,7 +45,7 @@ const ChatBox = () => {
   }, []);
 
   // Message handling
-  const handleSend = useCallback((text: string) => {
+  const handleMessageSend = useCallback((text: string) => {
 
     const userMsg: Message = {
       id: crypto.randomUUID(),
@@ -62,9 +64,16 @@ const ChatBox = () => {
       socket.current.emit("user_uttered", { message: text });
     } catch (err) {
       // swallow emit errors
+      console.error("Error emitting user message:", err);
     }
   }, []);
 
+  // CRM Form handling
+  const handleFormSend = async (info) => {
+    setUserInfo(info); // local state
+    socket.current.emit("crm_submit", info)
+  };
+  
   if (!isOpen) {
     return (
       <button onClick={() => setIsOpen(true)} className="chatbox-toggle" aria-label="Open chat">
@@ -76,8 +85,13 @@ const ChatBox = () => {
   return (
     <div className="chatbox-container">
       <ChatBoxHeader onClose={() => setIsOpen(false)} onMinimize={() => setIsOpen(false)} />
-      <ChatBoxBody messages={messages} />
-      <ChatBoxInput onSend={handleSend} />
+        <div className="chatbox-body-wrapper">
+          <ChatBoxBody messages={messages} />
+          {!userInfo && (
+            <ChatBoxOverlay onSubmit={handleFormSend}/>
+          )}
+        </div>
+      <ChatBoxInput onSend={handleMessageSend} disabled={!userInfo}/>
     </div>
   );
 };

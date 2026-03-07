@@ -36,37 +36,37 @@ sessions = {}
 # Client connects
 @sio.event
 async def connect(sid, environ):
-    print("Client connected:", sid)
+    print("---- CLIENT CONNECTED:", sid)
 
 # Handle session request from frontend
 @sio.event
 async def session_request(sid, data):
     session_id = data.get("session_id")
     sessions[sid] = session_id
-    print(f"Session requested: {session_id} (sid={sid})")
+    print(f"---- SESSION REQUESTED: {session_id} (sid={sid})")
     await sio.emit("session_confirm", {"session_id": session_id}, to=sid)
 
 # Handle user messages
 @sio.event
 async def user_uttered(sid, data):
     message = data.get("message")
-    print("RECEIVED:", data)
+    print("---- RECEIVED:", data)
 
     session_id = sessions.get(sid)
 
-    print(f"USER ({session_id}): {message}")
+    print(f"---- USER ({session_id}): {message}")
 
     # Process user message (import pipeline lazily and handle errors)
     try:
         response = process_user_message(message, session_id)
     except Exception as e:
-        print("Error while processing message:", e)
+        print("---- ERR: error while processsing message", e)
         bot_response = "Server error: failed processing message."
     else:
         bot_response = f"{response}"
 
     # Emit bot response to frontend
-    print(f"\nBOT ({session_id}): {bot_response}")
+    print(f"\n ---- BOT ({session_id}): {bot_response}")
 
     await sio.emit(
         "bot_uttered", 
@@ -75,6 +75,10 @@ async def user_uttered(sid, data):
     )   
    
     print("\n\n")
+
+@sio.event
+async def crm_submit(sid, data):
+    print("---- RECEIVED CRM DATA", data)
 
 # Handle disconnects
 @sio.event

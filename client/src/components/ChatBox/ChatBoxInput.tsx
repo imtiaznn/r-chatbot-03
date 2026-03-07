@@ -3,9 +3,10 @@ import { Send } from "lucide-react";
 
 interface ChatBoxInputProps {
   onSend: (text: string) => void;
+  disabled?: boolean;
 }
 
-const ChatBoxInput = ({ onSend }: ChatBoxInputProps) => {
+const ChatBoxInput = ({ onSend, disabled }: ChatBoxInputProps) => {
   const [value, setValue] = useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -24,6 +25,7 @@ const ChatBoxInput = ({ onSend }: ChatBoxInputProps) => {
         onChange={(e) => setValue(e.target.value)}
         placeholder="Type a message..."
         className="chatbox-input"
+        disabled={disabled}
       />
       <button type="submit" disabled={!value.trim()} className="chatbox-send-btn" aria-label="Send">
         <Send size={16} />
