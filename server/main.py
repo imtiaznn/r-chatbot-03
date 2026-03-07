@@ -8,18 +8,26 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 
-from app.pipeline import process_user_message
-# Delay importing the processing pipeline until needed to avoid import-time
-# heavy dependencies or CLI parsing side-effects. The pipeline will be
-# imported inside the `user_uttered` handler.
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 
-# Async Socket.IO server
+from app.pipeline import process_user_message
+from app.init_db import initialize_tables, UserInfo
+
+# Database Initialisation
+DATABASE_URL = "sqlite:///./store/form.db"
+
+engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+
+SessionLocal = sessionmaker(bind=engine)
+initialize_tables(engine)
+
+# Server Initializations
 sio = socketio.AsyncServer(
         async_mode="asgi", 
         cors_allowed_origins="*" # DEV ONLY
     )
 
-# Mount UI components
 fastapi_app = FastAPI()
 fastapi_app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")
 
@@ -77,8 +85,23 @@ async def user_uttered(sid, data):
     print("\n\n")
 
 @sio.event
-async def crm_submit(sid, data):
-    print("---- RECEIVED CRM DATA", data)
+async def access_form_submit(sid, data):
+    print("---- RECEIVED FORM DATA", data)
+
+    db = SessionLocal()
+
+    try:
+        info = UserInfo(
+            name=data.get("name"),
+            email=data.get("email")
+        )
+
+        db.add(info)
+        db.commit()
+    finally:
+        db.close()
+    
+    print("---- DATA UPLOADED TO DB SUCCESSFULLY")
 
 # Handle disconnects
 @sio.event

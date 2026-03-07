@@ -21,6 +21,8 @@ const ChatBoxOverlay = ({ onSubmit }: ChatBoxOverlayProps) => {
         <p className="chatbox-overlay-hello">Hello! 👋</p>
         <p className="chatbox-overlay-subtitle">Please introduce yourself to start chatting.</p>
         <input
+          id="text"
+          name="text"
           type="text"
           placeholder="Your name"
           value={name}
@@ -30,6 +32,8 @@ const ChatBoxOverlay = ({ onSubmit }: ChatBoxOverlayProps) => {
           maxLength={100}
         />
         <input
+          id="email"
+          name="email"
           type="email"
           placeholder="Your email"
           value={email}

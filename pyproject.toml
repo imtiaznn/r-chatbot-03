@@ -24,6 +24,7 @@ langchain-community = "^0.4.1"
 pypdf = "^6.7.3"
 langchain-openai = "^1.1.10"
 langgraph = "^1.0.10"
+sqlalchemy = "^2.0.48"
 
 
 [build-system]

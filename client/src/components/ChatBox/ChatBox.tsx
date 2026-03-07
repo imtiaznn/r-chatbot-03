@@ -68,10 +68,10 @@ const ChatBox = () => {
     }
   }, []);
 
-  // CRM Form handling
+  // Access Form handling
   const handleFormSend = async (info) => {
     setUserInfo(info); // local state
-    socket.current.emit("crm_submit", info)
+    socket.current.emit("access_form_submit", info)
   };
   
   if (!isOpen) {
