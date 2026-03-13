@@ -9,14 +9,15 @@ export interface Message {
 
 interface ChatBoxBodyProps {
   messages: Message[];
+  isTyping: boolean;
 }
 
-const ChatBoxBody = ({ messages }: ChatBoxBodyProps) => {
+const ChatBoxBody = ({ messages, isTyping }: ChatBoxBodyProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages, isTyping]);
 
   return (
     <div className="chatbox-body">
@@ -31,7 +32,17 @@ const ChatBoxBody = ({ messages }: ChatBoxBodyProps) => {
         </div>
       ))}
 
-    <div ref={bottomRef} />
+      {isTyping && (
+        <div className="chatbox-message-row bot">
+          <div className="chatbox-bubble bot typing-indicator">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      )}
+
+      <div ref={bottomRef} />
 
     </div>
   );

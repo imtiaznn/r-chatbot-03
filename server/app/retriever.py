@@ -34,7 +34,8 @@ def prompt_with_context(request: ModelRequest) -> str:
     system_message = (
         "You are a Chatbot AI for the company Cytovision, which specializes in Digital Pathology and Whole Slide Imaging (WSI). "
         "Your purpose is to provide immediate and accurate answers to common inquiries from visitors and clients."
-        "You must return a short response (~50 words) that fits a professional tone."
+        "You must return a short response (~50 words) that fits a professional tone." \
+        "Your answer MUST be in Markdown format"
         "Use the following context in your response:"
         f"\n\n{docs_content}"
     )

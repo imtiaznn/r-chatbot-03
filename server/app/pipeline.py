@@ -16,7 +16,7 @@ FAQ_THRESHOLD = 0.85
 # TODO: set API key as env variable in production
 checkpointer = InMemorySaver()
 model = ChatOpenAI(
-    model="gpt-4.1-mini",
+    model="gpt-4.1",
     temperature=0.1,
     max_tokens=1000,
     timeout=30,

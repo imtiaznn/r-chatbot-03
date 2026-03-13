@@ -13,10 +13,16 @@ import "./ChatBox.css";
 const ChatBox = () => {
   
   const [isOpen, setIsOpen] = useState(false);
+  const [isTyping, setIsTyping] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [userInfo, setUserInfo] = useState<{ name: string; email: string } | null>(null);
 
   const socket = useRef<Socket | null>(null)
+
+  // Minimum typing indicator display (ms)
+  const MIN_TYPING_DURATION = 500;
+  const typingStartRef = useRef<number | null>(null);
+  const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // socket.io connection
   useEffect(() => {
@@ -36,16 +42,54 @@ const ChatBox = () => {
         timestamp: new Date(),
       };
 
-      setMessages((prev) => [...prev, botMsg]);
+      // Start message sending to user
+      const start = typingStartRef.current;
+      if (!start) {
+        setIsTyping(false);
+        setMessages((prev) => [...prev, botMsg]);
+        return;
+      }
+
+      const elapsed = Date.now() - start;
+      const remaining = MIN_TYPING_DURATION - elapsed;
+
+      // Finish message sending to user
+      const finish = () => {
+        setIsTyping(false);
+        setMessages((prev) => [...prev, botMsg]);
+        typingTimerRef.current = null;
+      };
+
+      if (remaining <= 0) {
+        finish();
+      } else {
+        if (typingTimerRef.current) {
+          clearTimeout(typingTimerRef.current);
+        }
+        typingTimerRef.current = setTimeout(finish, remaining);
+      }
+
     });
 
     return () => {
       socket.current?.disconnect();
+      if (typingTimerRef.current) {
+        clearTimeout(typingTimerRef.current);
+        typingTimerRef.current = null;
+      }
     };
   }, []);
 
   // Message handling
   const handleMessageSend = useCallback((text: string) => {
+
+    // mark typing started and show indicator
+    setIsTyping(true)
+    typingStartRef.current = Date.now();
+    if (typingTimerRef.current) {
+      clearTimeout(typingTimerRef.current);
+      typingTimerRef.current = null;
+    }
 
     const userMsg: Message = {
       id: crypto.randomUUID(),
@@ -74,6 +118,7 @@ const ChatBox = () => {
     socket.current.emit("access_form_submit", info)
   };
   
+  // Chatbox Open Toggle
   if (!isOpen) {
     return (
       <button onClick={() => setIsOpen(true)} className="chatbox-toggle" aria-label="Open chat">
@@ -85,12 +130,17 @@ const ChatBox = () => {
   return (
     <div className="chatbox-container">
       <ChatBoxHeader onClose={() => setIsOpen(false)} onMinimize={() => setIsOpen(false)} />
+        
         <div className="chatbox-body-wrapper">
-          <ChatBoxBody messages={messages} />
+
+          <ChatBoxBody messages={messages} isTyping={isTyping}/>
+
           {!userInfo && (
             <ChatBoxOverlay onSubmit={handleFormSend}/>
           )}
+          
         </div>
+
       <ChatBoxInput onSend={handleMessageSend} disabled={!userInfo}/>
     </div>
   );
