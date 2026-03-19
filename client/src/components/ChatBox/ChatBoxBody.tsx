@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import Markdown from "../utils/Markdown";
 
 export interface Message {
   id: string;
@@ -28,7 +29,9 @@ const ChatBoxBody = ({ messages, isTyping }: ChatBoxBodyProps) => {
       {/* Show bubble for each message item */}
       {messages.map((msg) => (
         <div key={msg.id} className={`chatbox-message-row ${msg.sender}`}>
-          <div className={`chatbox-bubble ${msg.sender}`}>{msg.text}</div>
+          <div className={`chatbox-bubble ${msg.sender}`}>
+            <Markdown content={msg.text} />
+          </div>
         </div>
       ))}
 

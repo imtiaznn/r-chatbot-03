@@ -11,7 +11,7 @@ from app.retriever import faq_retriever, prompt_with_context
 FAQ_DISABLED = False
 LLM_DISABLED = False
 
-FAQ_THRESHOLD = 0.85
+FAQ_THRESHOLD = 0.95
 
 # TODO: set API key as env variable in production
 checkpointer = InMemorySaver()
@@ -73,7 +73,6 @@ def process_user_message(user_query, session_id):
         ):
         
             if message_chunk.content:
-                print(message_chunk.content, end="", flush=True)
                 response += message_chunk.content
 
     return response

@@ -3,6 +3,7 @@ server/store/faq_collection/
 server/store/kb_collection/
 __pycache__/
 *.pyc
+*.db
 
 # Logs
 logs

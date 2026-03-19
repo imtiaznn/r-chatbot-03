@@ -100,14 +100,46 @@ const ChatBox = () => {
 
     setMessages((prev) => [...prev,userMsg]);
 
-    if (!socket.current) {
+    // If the socket isn't connected
+    if (!socket.current || !socket.current.connected) {
+      const botMsg: Message = {
+        id: crypto.randomUUID(),
+        text: `Error retrieving response ☹️`,
+        sender: "bot",
+        timestamp: new Date(),
+      };
+
+      // // Simulate the typing indicator for at least MIN_TYPING_DURATION
+      // const start = typingStartRef.current;
+      // if (!start) {
+      //   setIsTyping(false);
+      //   setMessages((prev) => [...prev, botMsg]);
+      // } else {
+      //   const elapsed = Date.now() - start;
+      //   const remaining = MIN_TYPING_DURATION - elapsed;
+
+      //   const finish = () => {
+      //     setIsTyping(false);
+      //     setMessages((prev) => [...prev, botMsg]);
+      //     typingTimerRef.current = null;
+      //   };
+
+      //   if (remaining <= 0) {
+      //     finish();
+      //   } else {
+      //     if (typingTimerRef.current) {
+      //       clearTimeout(typingTimerRef.current);
+      //     }
+      //     typingTimerRef.current = setTimeout(finish, remaining);
+      //   }
+      // }
+
       return;
     }
 
     try {
       socket.current.emit("user_uttered", { message: text });
     } catch (err) {
-      // swallow emit errors
       console.error("Error emitting user message:", err);
     }
   }, []);
