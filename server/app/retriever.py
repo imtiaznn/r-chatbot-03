@@ -41,7 +41,7 @@ def prompt_with_context(request: ModelRequest) -> str:
         "- Use ONLY the information in the context."
         "- If the answer is not in the context, say you do not have enough information."
         "- Answer in a professional tone."
-        "- Use a maximum of 100 words"
+        "- Use a maximum of 60 words"
 
         "- Output MUST be valid Markdown (CommonMark)."
         "- Use headings (##, ###, ####) where appropriate."

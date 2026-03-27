@@ -24,14 +24,28 @@ const ChatBox = () => {
   const typingStartRef = useRef<number | null>(null);
   const typingTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // socket.io connection
+// Centralized socket event emitter
+  const emitSocketEvent = useCallback((event: string, data: unknown) => {
+    if (!socket.current?.connected) {
+      console.warn(`Socket not connected. Cannot emit "${event}".`);
+      return false;
+    }
+
+    try {
+      socket.current.emit(event, data);
+      return true;
+    } catch (err) {
+      console.error(`Error emitting "${event}":`, err);
+      return false;
+    }
+  }, []);
+
   useEffect(() => {
+    // Socket connection handling
     socket.current = io("http://localhost:5005", { transports: ["websocket"] });
 
     socket.current.on("connect", () => {
-      socket.current?.emit("session_request", {
-        session_id: crypto.randomUUID(),
-      });
+      emitSocketEvent("session_request", { session_id: crypto.randomUUID() });
     });
 
     socket.current.on("bot_uttered", (data) => {
@@ -42,7 +56,7 @@ const ChatBox = () => {
         timestamp: new Date(),
       };
 
-      // Start message sending to user
+      // Message handling, typing indicator timer
       const start = typingStartRef.current;
       if (!start) {
         setIsTyping(false);
@@ -53,7 +67,6 @@ const ChatBox = () => {
       const elapsed = Date.now() - start;
       const remaining = MIN_TYPING_DURATION - elapsed;
 
-      // Finish message sending to user
       const finish = () => {
         setIsTyping(false);
         setMessages((prev) => [...prev, botMsg]);
@@ -63,14 +76,13 @@ const ChatBox = () => {
       if (remaining <= 0) {
         finish();
       } else {
-        if (typingTimerRef.current) {
-          clearTimeout(typingTimerRef.current);
-        }
+        if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
         typingTimerRef.current = setTimeout(finish, remaining);
       }
 
     });
 
+    // Socket disconnect
     return () => {
       socket.current?.disconnect();
       if (typingTimerRef.current) {
@@ -78,74 +90,37 @@ const ChatBox = () => {
         typingTimerRef.current = null;
       }
     };
-  }, []);
+  }, [emitSocketEvent]);
 
   // Message handling
   const handleMessageSend = useCallback((text: string) => {
-
-    // mark typing started and show indicator
-    setIsTyping(true)
-    typingStartRef.current = Date.now();
-    if (typingTimerRef.current) {
-      clearTimeout(typingTimerRef.current);
-      typingTimerRef.current = null;
-    }
-
     const userMsg: Message = {
       id: crypto.randomUUID(),
       text,
       sender: "user",
       timestamp: new Date(),
     };
+    setMessages((prev) => [...prev, userMsg]);
 
-    setMessages((prev) => [...prev,userMsg]);
+    const sent = emitSocketEvent("user_uttered", { message: text });
 
-    // If the socket isn't connected
-    if (!socket.current || !socket.current.connected) {
-      const botMsg: Message = {
-        id: crypto.randomUUID(),
-        text: `Error retrieving response ☹️`,
-        sender: "bot",
-        timestamp: new Date(),
-      };
-
-      // // Simulate the typing indicator for at least MIN_TYPING_DURATION
-      // const start = typingStartRef.current;
-      // if (!start) {
-      //   setIsTyping(false);
-      //   setMessages((prev) => [...prev, botMsg]);
-      // } else {
-      //   const elapsed = Date.now() - start;
-      //   const remaining = MIN_TYPING_DURATION - elapsed;
-
-      //   const finish = () => {
-      //     setIsTyping(false);
-      //     setMessages((prev) => [...prev, botMsg]);
-      //     typingTimerRef.current = null;
-      //   };
-
-      //   if (remaining <= 0) {
-      //     finish();
-      //   } else {
-      //     if (typingTimerRef.current) {
-      //       clearTimeout(typingTimerRef.current);
-      //     }
-      //     typingTimerRef.current = setTimeout(finish, remaining);
-      //   }
-      // }
-
+    if (!sent) {
+      emitSocketEvent("error", { type: "Could not send message to server" })
+      console.error("Could not send message to server")
       return;
     }
 
-    try {
-      socket.current.emit("user_uttered", { message: text });
-    } catch (err) {
-      console.error("Error emitting user message:", err);
+    // Mark typing started and show indicator
+    setIsTyping(true);
+    typingStartRef.current = Date.now();
+    if (typingTimerRef.current) {
+      clearTimeout(typingTimerRef.current);
+      typingTimerRef.current = null;
     }
-  }, []);
+  }, [emitSocketEvent]);
 
   // Access Form handling
-  const handleFormSend = async (info) => {
+  const handleFormSend = async (info: any) => {
     setUserInfo(info); // local state
     socket.current.emit("access_form_submit", info)
   };
