@@ -1,0 +1,124 @@
+import time
+import socketio
+import json
+import inspect
+
+from db.events import insert_event
+from db.database import AsyncSessionLocal
+from db.models import Sender, Messages, Events, Sessions
+
+class TrackingServer(socketio.AsyncServer):
+
+    # Event Handlers tracking
+    async def _on_connect(self, session, sid, payload):
+        return
+    async def _on_disconnect(self, session, sid, payload):
+        return
+    async def _on_session_request(self, session, sid, payload):
+        return
+    async def _on_user_uttered(self, session, sid, payload):
+        sio_session = await self._safe_get_session(sid)
+
+        session.add(Messages(
+               session_id=sio_session.get("session_id"),
+               text=payload.get("message"),
+               sender=Sender.user
+        ))
+
+        return
+    async def _on_access_form_submit(self, session, sid, payload):
+        sio_session = await self._safe_get_session(sid)
+
+        session.add(Sessions(
+            id=sio_session.get("session_id"),
+            user_id=sio_session.get("user_id")
+        ))
+        
+        return
+
+    async def _get_user_id(self, event, sid):
+        if event == "connect" or sid is None:
+            return None
+        try:
+            sio_session = await self.get_session(sid)
+            return sio_session.get("user_id")
+        except KeyError:
+            return None
+
+    async def _safe_get_session(self, sid) -> dict:
+        try:
+            return await self.get_session(sid)
+        except KeyError:
+            return {}
+
+    def _get_dispatch_table(self):
+        return {
+            "connect": self._on_connect,
+            "access_form_submit": self._on_access_form_submit,
+            "session_request": self._on_session_request,
+            "user_uttered": self._on_user_uttered,
+            "disconnect": self._on_disconnect,
+        }
+
+    @staticmethod
+    async def _parse_payload(event, payload) -> dict | None:
+        # skip environ on connect — not useful to store
+        if event == "connect":
+            return None
+
+        # resolve if awaitable
+        try:
+            if callable(getattr(payload, '__await__', None)) or inspect.isawaitable(payload):
+                payload = await payload
+        except Exception:
+            return None
+
+        # parse if string
+        if isinstance(payload, str):
+            try:
+                return json.loads(payload)
+            except json.JSONDecodeError:
+                return {"raw": payload}
+
+        return payload
+
+    async def _trigger_event(self, event, *args, **kwargs):
+        print(f"---- LOG: _trigger_event fired: {event}")
+        
+        start = time.perf_counter()
+        result = await super()._trigger_event(event, *args, **kwargs)
+        duration_ms = (time.perf_counter() - start) * 1000
+
+        sid     = args[1] if len(args) > 1 else None
+        payload = await self._parse_payload(event, args[2] if len(args) > 2 else None)
+        print(f"---- DEBUG: payload type = {type(payload)}, event = {event}")
+
+        user_id = await self._get_user_id(event, sid)
+
+        try:
+            async with AsyncSessionLocal() as session:
+                async with session.begin():
+
+                    # Event handler
+                    handler = self._get_dispatch_table().get(event)
+                    if handler:
+                        print(f"---- EVENT: running handler for event ({event})")
+                        await handler(session, sid, payload)
+
+                    # Event logging
+                    session.add(Events(
+                        session_id=sid,
+                        event=event,
+                        user_id=user_id,
+                        duration_ms=round(duration_ms, 2),
+                        data=json.dumps(payload) if payload else None,
+                    ))
+                    print(f"---- EVENT: \n\tsid:{sid}\n\tevent:{event}")
+
+        except Exception as e:
+            print(f"---- ERROR: (tracking_server) {e}")
+
+        return result
+
+# Instantiate here so everything imports from one place
+sio = TrackingServer(async_mode="asgi", cors_allowed_origins="*")

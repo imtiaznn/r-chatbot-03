@@ -1,5 +1,5 @@
 from db.database import AsyncSessionLocal
-from db.models import Event
+from db.models import Events, Sessions
 
 async def insert_event(
     path: str,
@@ -10,9 +10,9 @@ async def insert_event(
 ):
     async with AsyncSessionLocal() as session:
         async with session.begin():
-            session.add(Event(
-                event=path,
+            session.add(Events(
                 sid=sid,
+                event=path,
                 user_id=user_id,
                 duration_ms=duration_ms,
                 data=data
@@ -22,3 +22,12 @@ async def insert_event(
                     \tevent: {path}, 
                     \tsid: {sid}, 
                     \tuserID: {user_id}""")
+            
+async def insert_session(
+        user_id: int,
+):
+    async with AsyncSessionLocal() as session:
+        async with session.begin():
+            session.add(Sessions(
+                user_id=user_id
+            ))

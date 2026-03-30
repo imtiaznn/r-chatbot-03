@@ -56,8 +56,6 @@ def process_user_message(user_query, session_id):
         faqs = faq_retriever(context_query, FAQ_THRESHOLD)
         if faqs:
             faq_a = faqs[0].metadata.get("answer", "")
-            print(f"---- RETRIEVED FAQS: {[faq.id for faq in faqs]}\n\n")
-
             response = faq_a
             return response
 

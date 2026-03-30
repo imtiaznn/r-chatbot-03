@@ -51,7 +51,7 @@ const ChatBox = () => {
     socket.current.on("bot_uttered", (data) => {
       const botMsg: Message = {
         id: crypto.randomUUID(),
-        text: data.text,
+        text: data.message,
         sender: "bot",
         timestamp: new Date(),
       };
