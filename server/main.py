@@ -22,34 +22,6 @@ from db.crud import get_user
 from app.pipeline import process_user_message
 from app.tracking_server import sio
 
-# class TrackingServer(socketio.AsyncServer):
-#     async def _trigger_event(self, event, *args, **kwargs):
-#         start = time.perf_counter()
-#         result = await super()._trigger_event(event, *args, **kwargs)
-#         duration_ms = (time.perf_counter() - start) * 1000
-
-#         sid = args[0] if args else None
-
-#         user_id = None
-#         if event != "connect" and sid is not None:
-#             try:
-#                 sio_session = await self.get_session(sid)
-#                 user_id = sio_session.get("user_id")
-#             except KeyError:
-#                 pass
-
-#         asyncio.create_task(
-#             insert_event(
-#                 # event_type="socketio",
-#                 path=event,
-#                 sid=sid,
-#                 user_id=user_id,
-#                 duration_ms=round(duration_ms, 2),
-#             )
-#         )
-
-#         return result
-
 @asynccontextmanager
 async def lifespan(app : FastAPI):
     # Startup
@@ -121,17 +93,17 @@ async def session_request(sid, data):
 # Handle user messages
 @sio.event
 async def user_uttered(sid, data):
-    message = data.get("message")
+    text = data.get("text")
     print("---- RECEIVED:", data)
 
     sio_session = await sio.get_session(sid)
     session_id = sio_session.get("session_id")
 
-    print(f"---- USER ({session_id}): {message}")
+    print(f"---- USER ({session_id}): {text}")
 
     # Process user message (import pipeline lazily and handle errors)
     try:
-        response = process_user_message(message, session_id)
+        response = process_user_message(text, session_id)
     except Exception as e:
         print("---- ERR: error while processsing message", e)
         bot_response = "Server error: failed processing message."
@@ -154,7 +126,7 @@ async def error(sid, data):
     print(f"---- ERROR: {data.get(type)}")
     await sio.emit(
         "bot_uttered",
-        {"message": data.get(type)},
+        {"text": data.get(type)},
         to=sid
     )
 

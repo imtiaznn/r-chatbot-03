@@ -51,7 +51,7 @@ const ChatBox = () => {
     socket.current.on("bot_uttered", (data) => {
       const botMsg: Message = {
         id: crypto.randomUUID(),
-        text: data.message,
+        text: data.text,
         sender: "bot",
         timestamp: new Date(),
       };
@@ -96,13 +96,13 @@ const ChatBox = () => {
   const handleMessageSend = useCallback((text: string) => {
     const userMsg: Message = {
       id: crypto.randomUUID(),
-      text,
+      text: text,
       sender: "user",
       timestamp: new Date(),
     };
     setMessages((prev) => [...prev, userMsg]);
 
-    const sent = emitSocketEvent("user_uttered", { message: text });
+    const sent = emitSocketEvent("user_uttered", { text: text });
 
     if (!sent) {
       emitSocketEvent("error", { type: "Could not send message to server" })

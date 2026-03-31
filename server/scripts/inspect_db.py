@@ -34,7 +34,7 @@ def inspect_db(db_path: str):
 
             # Preview first 3 rows
             if count > 0:
-                cursor.execute(f"SELECT * FROM {table_name} LIMIT 5")
+                cursor.execute(f"SELECT * FROM {table_name} LIMIT 10")
                 rows = cursor.fetchall()
                 col_names = [desc[0] for desc in cursor.description]
                 print(f"\nPreview:")

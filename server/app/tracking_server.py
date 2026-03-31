@@ -21,8 +21,18 @@ class TrackingServer(socketio.AsyncServer):
 
         session.add(Messages(
                session_id=sio_session.get("session_id"),
-               text=payload.get("message"),
+               text=payload.get("text"),
                sender=Sender.user
+        ))
+
+        return
+    async def _on_bot_uttered(self, session, sid, payload):
+        sio_session = await self._safe_get_session(sid)
+
+        session.add(Messages(
+               session_id=sio_session.get("session_id"),
+               text=payload.get("text"),
+               sender=Sender.bot
         ))
 
         return
@@ -51,13 +61,19 @@ class TrackingServer(socketio.AsyncServer):
         except KeyError:
             return {}
 
-    def _get_dispatch_table(self):
+    def _get_incoming_dispatch_table(self):
+        """Events received from client — handled in _trigger_event"""
         return {
             "connect": self._on_connect,
             "access_form_submit": self._on_access_form_submit,
             "session_request": self._on_session_request,
             "user_uttered": self._on_user_uttered,
             "disconnect": self._on_disconnect,
+        }
+    def _get_outgoing_dispatch_table(self):
+        """Events emitted to client — handled in _emit_internal"""
+        return {
+            "bot_uttered": self._on_bot_uttered,
         }
 
     @staticmethod
@@ -82,41 +98,45 @@ class TrackingServer(socketio.AsyncServer):
 
         return payload
 
+    async def _track(self, event, sid, user_id, payload, duration_ms, dispatch_table):
+        try:
+            async with AsyncSessionLocal() as session:
+                async with session.begin():
+                    handler = dispatch_table.get(event)
+                    if handler:
+                        await handler(session, sid, payload)
+
+                    session.add(Events(
+                        session_id=sid,
+                        event=event,
+                        user_id=user_id,
+                        duration_ms=round(duration_ms, 2) if duration_ms else None,
+                        data=json.dumps(payload) if payload else None,
+                    ))
+        except Exception as e:
+            print(f"---- ERROR: (tracking_server) {e}")
+
     async def _trigger_event(self, event, *args, **kwargs):
-        print(f"---- LOG: _trigger_event fired: {event}")
-        
         start = time.perf_counter()
         result = await super()._trigger_event(event, *args, **kwargs)
         duration_ms = (time.perf_counter() - start) * 1000
 
         sid     = args[1] if len(args) > 1 else None
         payload = await self._parse_payload(event, args[2] if len(args) > 2 else None)
-        print(f"---- DEBUG: payload type = {type(payload)}, event = {event}")
-
         user_id = await self._get_user_id(event, sid)
 
-        try:
-            async with AsyncSessionLocal() as session:
-                async with session.begin():
+        await self._track(event, sid, user_id, payload, duration_ms, self._get_incoming_dispatch_table())
+        return result
 
-                    # Event handler
-                    handler = self._get_dispatch_table().get(event)
-                    if handler:
-                        print(f"---- EVENT: running handler for event ({event})")
-                        await handler(session, sid, payload)
+    async def emit(self, event, data=None, to=None, room=None, skip_sid=None,
+                namespace=None, callback=None, ignore_queue=False):
+        
+        result = await super().emit(event, data, to=to, room=room, skip_sid=skip_sid,
+                                    namespace=namespace, callback=callback, 
+                                    ignore_queue=ignore_queue)
 
-                    # Event logging
-                    session.add(Events(
-                        session_id=sid,
-                        event=event,
-                        user_id=user_id,
-                        duration_ms=round(duration_ms, 2),
-                        data=json.dumps(payload) if payload else None,
-                    ))
-                    print(f"---- EVENT: \n\tsid:{sid}\n\tevent:{event}")
-
-        except Exception as e:
-            print(f"---- ERROR: (tracking_server) {e}")
+        sid = to or room
+        await self._track(event, sid, None, data, None, self._get_outgoing_dispatch_table())
 
         return result
 
