@@ -3,42 +3,89 @@ import os
 
 import socketio
 import uvicorn
-import time
 import asyncio
 
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from fastapi import Depends
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
+from sqlalchemy import text
 
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
 from db.database import engine, AsyncSessionLocal
-from db.models import Base, Users
-from db.events import insert_event
+from db.models import Base
 from db.crud import get_user
+from db.queries import run_query, run_all_queries, get_date_filter
 
 from app.pipeline import process_user_message
 from app.tracking_server import sio
+
+async def periodic_checkpoint():
+    """Force WAL checkpoint every 5 minutes to prevent file growth."""
+    while True:
+        await asyncio.sleep(300)
+        try:
+            async with engine.begin() as conn:
+                await conn.execute(text("PRAGMA wal_checkpoint(TRUNCATE)"))
+        except Exception as e:
+            print(f"---- ERROR: checkpoint failed: {e}")
 
 @asynccontextmanager
 async def lifespan(app : FastAPI):
     # Startup
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+
+    checkpoint_task = asyncio.create_task(periodic_checkpoint())
+
     yield
+
+    checkpoint_task.cancel()
+    await asyncio.gather(
+        checkpoint_task, 
+        return_exceptions=True
+    )
+
+    tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+    for task in tasks:
+        task.cancel()
+    await asyncio.gather(*tasks, return_exceptions=True)
+
+    async with engine.begin() as conn:
+        await conn.execute(text("PRAGMA wal_checkpoint(TRUNCATE)"))
+
     # Shutdown
     await engine.dispose()
 
 fastapi_app = FastAPI(lifespan=lifespan)
 fastapi_app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")
 
-@fastapi_app.get("/{full_path:path}")
-def serve_react(full_path: str):
+# Static Files
+@fastapi_app.get("/")
+async def serve_chatbot():
     return FileResponse(os.path.join("dist", "index.html"))
 
 app = socketio.ASGIApp(sio, fastapi_app)
+
+# API
+@fastapi_app.get("/api/dashboard")
+async def get_dashboard_data(period: str = "all", start: str = None, end: str = None):
+    date_start, date_end = get_date_filter(period, start, end)
+    async with AsyncSessionLocal() as session:
+        return await run_all_queries(session, date_start, date_end, period)
+
+@fastapi_app.get("/api/dashboard/{metric}")
+async def get_dashboard_metric(metric: str):
+    async with AsyncSessionLocal() as session:
+        return await run_query(session, metric)
+
+@fastapi_app.get("/dashboard")
+async def serve_dashboard():
+    return FileResponse(os.path.join("dist", "dashboard.html"))
+
+@sio.event
+async def dashboard_join(sid):
+    await sio.enter_room(sid, "dashboard")
+    print(f"---- DASHBOARD: {sid} joined dashboard room")
 
 # Client connects
 @sio.event
@@ -133,6 +180,7 @@ async def error(sid, data):
 # Handle disconnects
 @sio.event
 async def disconnect(sid):
+    await sio.leave_room(sid, "dashboard")
     print("---- CLIENT DISCONNECTED:", sid)
 
 if __name__ == "__main__":

@@ -1,6 +1,28 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from db.models import Users, Sessions
+from db.models import Users, Sessions, Events
+
+# async def insert_event(
+#     path: str,
+#     sid: str = None,
+#     user_id: str = None,
+#     duration_ms: float = None,
+#     data= None,
+# ):
+#     async with AsyncSessionLocal() as session:
+#         async with session.begin():
+#             session.add(Events(
+#                 sid=sid,
+#                 event=path,
+#                 user_id=user_id,
+#                 duration_ms=duration_ms,
+#                 data=data
+#             ))
+
+#             print(f"""---- ADDED EVENT:\n
+#                     \tevent: {path}, 
+#                     \tsid: {sid}, 
+#                     \tuserID: {user_id}""")
 
 async def get_user(session: AsyncSession, name: str, email: str) -> tuple[Users, bool]:
     result = await session.execute(

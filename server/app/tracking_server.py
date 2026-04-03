@@ -2,12 +2,17 @@ import time
 import socketio
 import json
 import inspect
+from datetime import datetime, timezone
 
-from db.events import insert_event
 from db.database import AsyncSessionLocal
 from db.models import Sender, Messages, Events, Sessions
 
+EXCLUDED_EMIT_EVENTS = {"dashboard_update", "form_success", "form_error", "session_confirm"}
+
 class TrackingServer(socketio.AsyncServer):
+
+    _last_dashboard_broadcast = None
+    _dashboard_broadcast_interval = 2
 
     # Event Handlers tracking
     async def _on_connect(self, session, sid, payload):
@@ -113,6 +118,24 @@ class TrackingServer(socketio.AsyncServer):
                         duration_ms=round(duration_ms, 2) if duration_ms else None,
                         data=json.dumps(payload) if payload else None,
                     ))
+
+            # Broadcast to dashboard room after commit
+            now = datetime.now(timezone.utc).timestamp()
+
+            if (
+                self._last_dashboard_broadcast is None or
+                now - self._last_dashboard_broadcast >= self._dashboard_broadcast_interval
+            ):
+                await self.emit("dashboard_update", {
+                    "event":       event, 
+                    "session_id":  sid,
+                    "user_id":     user_id,
+                    "duration_ms": round(duration_ms, 2) if duration_ms else None,
+                    "timestamp":   datetime.now(timezone.utc).isoformat(),
+                    "data":        json.dumps(payload) if payload else None,
+                }, room="dashboard")
+            
+
         except Exception as e:
             print(f"---- ERROR: (tracking_server) {e}")
 
@@ -132,8 +155,12 @@ class TrackingServer(socketio.AsyncServer):
                 namespace=None, callback=None, ignore_queue=False):
         
         result = await super().emit(event, data, to=to, room=room, skip_sid=skip_sid,
-                                    namespace=namespace, callback=callback, 
+                                    namespace=namespace, callback=callback,
                                     ignore_queue=ignore_queue)
+
+        # Skip internal/system events
+        if event in EXCLUDED_EMIT_EVENTS:
+            return result
 
         sid = to or room
         await self._track(event, sid, None, data, None, self._get_outgoing_dispatch_table())
