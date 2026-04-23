@@ -10,7 +10,7 @@ const ChatBoxHeader = ({ onClose, onMinimize }: ChatBoxHeaderProps) => {
     <div className="chatbox-header">
       <div className="chatbox-header-title">
         <MessageSquare size={18} />
-        <span>Cytovision Chatbot</span>
+        <span>Cytobot</span>
       </div>
       <div className="chatbox-header-actions">
         <button onClick={onMinimize} className="chatbox-header-btn" aria-label="Minimize">

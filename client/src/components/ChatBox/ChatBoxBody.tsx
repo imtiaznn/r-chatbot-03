@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import Markdown from "../utils/Markdown";
+import FaqTemplate from "./FaqTemplate";
 
 export interface Message {
   id: string;
@@ -11,9 +12,10 @@ export interface Message {
 interface ChatBoxBodyProps {
   messages: Message[];
   isTyping: boolean;
+  onFaqSelect?: (q: string) => void;
 }
 
-const ChatBoxBody = ({ messages, isTyping }: ChatBoxBodyProps) => {
+const ChatBoxBody = ({ messages, isTyping, onFaqSelect }: ChatBoxBodyProps) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,9 +24,12 @@ const ChatBoxBody = ({ messages, isTyping }: ChatBoxBodyProps) => {
 
   return (
     <div className="chatbox-body">
-      {messages.length === 0 && (
+      {/* {messages.length === 0 && (
         <p className="chatbox-empty">No messages yet. Say hello!</p>
-      )}
+      )} */}
+      <div className="chatbox-message-row bot">
+        <FaqTemplate onSelect={onFaqSelect}/>
+      </div>
       
       {/* Show bubble for each message item */}
       {messages.map((msg) => (

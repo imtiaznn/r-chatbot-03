@@ -10,6 +10,7 @@
   --border: #e2e8f0;
   --ring: #0f172a;
   --radius: 0.5rem;
+  --brand-color: #4a90e2;
 }
 
 *,
@@ -26,4 +27,9 @@ body {
   color: var(--foreground);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+
+  background-image: url("../dist/assets/background.png");
+  min-height: 100vh;
+  background-size: cover;
+  background-repeat: no-repeat;
 }

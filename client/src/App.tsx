@@ -1,7 +1,10 @@
 import ChatBox from "./components/ChatBox/ChatBox";
+import "./App.css"
 
 const App = () => (
-  <ChatBox></ChatBox>
+  <div className="app">
+    <ChatBox></ChatBox>
+  </div>
 );
 
 export default App;

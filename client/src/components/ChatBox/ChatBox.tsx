@@ -8,7 +8,7 @@ import ChatBoxInput from "./ChatBoxInput";
 import ChatBoxOverlay from "./ChatBoxOverlay";
 
 import "./ChatBox.css";
-
+import FaqTemplate from "./FaqTemplate";
 
 const ChatBox = () => {
   
@@ -140,7 +140,7 @@ const ChatBox = () => {
         
         <div className="chatbox-body-wrapper">
 
-          <ChatBoxBody messages={messages} isTyping={isTyping}/>
+          <ChatBoxBody messages={messages} isTyping={isTyping} onFaqSelect={handleMessageSend}/>
 
           {!userInfo && (
             <ChatBoxOverlay onSubmit={handleFormSend}/>
