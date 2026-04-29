@@ -1,3 +1,4 @@
+// Written by Group 09
 import { useEffect, useRef } from "react";
 import Markdown from "../utils/Markdown";
 import FaqTemplate from "./FaqTemplate";
