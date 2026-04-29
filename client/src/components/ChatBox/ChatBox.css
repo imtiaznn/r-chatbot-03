@@ -191,6 +191,8 @@
 .typing-indicator span {
   width: 8px;
   height: 8px;
+  margin-top: 2px;
+  margin-bottom: 2px;
   background: #888;
   border-radius: 50%;
   animation: typing 1.4s infinite ease-in-out;

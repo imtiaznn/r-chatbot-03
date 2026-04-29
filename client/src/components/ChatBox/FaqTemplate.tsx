@@ -4,24 +4,23 @@ import Markdown from "../utils/Markdown"
 const faqData: Record<string, string[]> = {
   "General": [
     "What is Cytovision?",
-    "How do I create an account?",
-    "Is my data secure?",
-    "What languages are supported?",
-    "How do I reset my password?",
+    "What is digital pathology?",
+    "What is Whole Slide Imaging (WSI)?"
   ],
   "Products and Services": [
     "What products does Cytovision offer?",
-    "How do I upgrade my plan?",
-    "Is there a free trial?",
-    "What integrations are available?",
-    "How do I cancel my subscription?",
+    "What is EnvisionPath?",
+    "Do I need to buy hardware to use Cytovision's services?",
   ],
-  "Contact Us": [
-    "How do I reach support?",
-    "What are your support hours?",
-    "Where is Cytovision located?",
-    "Can I request a demo?",
-    "How do I submit feedback?",
+  "Privacy": [
+    "Is my data safe with Cytovision?",
+    "Who owns the slides and data I submit?",
+    "Can I delete my data after the service?",
+  ],
+  "Support": [
+    "How do I contact Cytovision?",
+    "Can I request a product demo?",
+    "How do I start using Cytovision's services?"
   ],
 };
 

@@ -1,3 +1,4 @@
+# Written by Group 09
 import shutil
 import os
 import yaml
@@ -89,8 +90,6 @@ def vectorize_kb(kb_collection, text_splitter, input_kb_dir):
         print("---- Chunking documents...")
         chunk = text_splitter.split_documents(docs)
         all_chunks.extend(chunk)
-
-    # TODO: Add metadata (titles, etc.)
 
     # Add all documents to collection
     print(f"---- Adding chunks to KB collection...")

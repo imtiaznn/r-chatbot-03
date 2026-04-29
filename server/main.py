@@ -1,4 +1,4 @@
-# main.py
+# Written by Group 09
 import os
 
 import socketio
@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from sqlalchemy import text
+from datetime import datetime, timezone
 
 from db.database import engine, AsyncSessionLocal
 from db.models import Base
@@ -38,7 +39,6 @@ async def lifespan(app : FastAPI):
     checkpoint_task = asyncio.create_task(periodic_checkpoint())
 
     yield
-
     checkpoint_task.cancel()
     await asyncio.gather(
         checkpoint_task, 
@@ -64,6 +64,11 @@ fastapi_app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets"
 async def serve_chatbot():
     return FileResponse(os.path.join("dist", "index.html"))
 
+from app.tracking_server import sio
+
+fastapi_app = FastAPI(lifespan=lifespan)
+fastapi_app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")
+
 app = socketio.ASGIApp(sio, fastapi_app)
 
 # API
@@ -74,9 +79,33 @@ async def get_dashboard_data(period: str = "all", start: str = None, end: str = 
         return await run_all_queries(session, date_start, date_end, period)
 
 @fastapi_app.get("/api/dashboard/{metric}")
-async def get_dashboard_metric(metric: str):
+async def get_dashboard_metric(metric: str, period: str = "all", start: str = None, end: str = None):
+    date_start, date_end = get_date_filter(period, start, end)
     async with AsyncSessionLocal() as session:
-        return await run_query(session, metric)
+        return await run_query(session, metric, date_start, date_end)   
+    
+@fastapi_app.get("/api/dashboard/users")
+async def get_dashboard_users():
+    async with AsyncSessionLocal() as session:
+        return await run_query(session, "users_with_stats", "2000-01-01", datetime.now(timezone.utc).isoformat())
+
+@fastapi_app.get("/api/dashboard/users/{user_id}/messages")
+async def get_user_messages(user_id: str):
+    async with AsyncSessionLocal() as session:
+        result = await session.execute(
+            text("""
+                SELECT m.text, m.sender, m.timestamp
+                FROM messages m
+                JOIN sessions s ON s.id = m.session_id
+                WHERE s.user_id = :user_id
+                ORDER BY m.timestamp ASC
+            """),
+            {"user_id": user_id}
+        )
+        rows = result.fetchall()
+        cols = result.keys()
+        return [dict(zip(cols, r)) for r in rows]
+
 
 @fastapi_app.get("/dashboard")
 async def serve_dashboard():
@@ -110,7 +139,7 @@ async def access_form_submit(sid, data):
                 user_id = user.id
                 session_id = sid
 
-        # Save both user_id and session_id into sio session
+        # Save both user_id and session_id as sio variable
         await sio.save_session(sid, {
             "user_id": user_id,
             "session_id": session_id
@@ -170,10 +199,10 @@ async def user_uttered(sid, data):
 
 @sio.event
 async def error(sid, data):
-    print(f"---- ERROR: {data.get(type)}")
+    print(f"---- ERROR: {data.get('type')}")
     await sio.emit(
         "bot_uttered",
-        {"text": data.get(type)},
+        {"text": data.get("type")},
         to=sid
     )
 
@@ -188,5 +217,4 @@ if __name__ == "__main__":
         "main:app", 
         host="0.0.0.0", 
         port=5005,
-        reload=True
     )

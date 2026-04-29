@@ -1,30 +1,32 @@
-# db/queries.py
+# Written by Group 09
 from datetime import datetime, timedelta, timezone
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 QUERIES = {
     # KPIs
+    "total_users": """
+        SELECT COUNT(*) AS total_users
+        FROM users
+    """,
+
     "total_sessions": """
-        SELECT DATE(timestamp) AS day, COUNT(*) AS total_sessions
+        SELECT COUNT(*) AS total_sessions
         FROM sessions
-        WHERE timestamp BETWEEN :start and :end
-        GROUP BY DATE(timestamp)
-        ORDER BY day
+        WHERE timestamp BETWEEN :start AND :end
     """,
 
     "total_messages": """
-        SELECT DATE(timestamp) AS day, COUNT(*) AS total_messages
+        SELECT COUNT(*) AS total_messages
         FROM messages
-        WHERE timestamp BETWEEN :start and :end
-        GROUP BY DATE(timestamp)
-        ORDER BY day
+        WHERE timestamp BETWEEN :start AND :end
     """,
 
     "avg_bot_response_time": """
         SELECT AVG(duration_ms) AS avg_bot_response_time_ms
         FROM events
         WHERE event = 'bot_uttered'
+        AND timestamp BETWEEN :start AND :end
     """,
 
     # Trends
@@ -60,6 +62,30 @@ QUERIES = {
         ORDER BY day
     """,
 
+    "hourly_activity": """
+        SELECT CAST(STRFTIME('%H', timestamp) AS INTEGER) AS hour, COUNT(*) AS messages
+        FROM messages
+        WHERE sender = 'user'
+        AND timestamp BETWEEN :start AND :end
+        GROUP BY STRFTIME('%H', timestamp)
+        ORDER BY hour
+    """,
+
+    "users_with_stats": """
+        SELECT
+            u.id,
+            u.name,
+            u.email,
+            COUNT(DISTINCT s.id)  AS total_sessions,
+            COUNT(m.id)           AS total_messages,
+            MAX(s.timestamp)      AS last_seen
+        FROM users u
+        LEFT JOIN sessions s ON s.user_id = u.id
+        LEFT JOIN messages m ON m.session_id = s.id AND m.sender = 'user'
+        GROUP BY u.id, u.name, u.email
+        ORDER BY total_messages DESC
+    """,
+
     "recent_events": """
         SELECT session_id, event, user_id, duration_ms, timestamp, data
         FROM events
@@ -67,12 +93,20 @@ QUERIES = {
         LIMIT 10
     """,
 
-    # TODO: Message categories
     "message_categories_over_time": """
         SELECT DATE(timestamp) AS day, sender, COUNT(*) AS count
         FROM messages
+        WHERE timestamp BETWEEN :start AND :end
         GROUP BY DATE(timestamp), sender
         ORDER BY day, sender
+    """,
+
+    "user_messages": """
+    SELECT m.text, m.sender, m.timestamp
+    FROM messages m
+    JOIN sessions s ON s.id = m.session_id
+    WHERE s.user_id = :user_id
+    ORDER BY m.timestamp ASC
     """,
 }
 
@@ -111,8 +145,10 @@ async def run_query(session: AsyncSession, key: str, start: str, end: str) -> li
 async def run_all_queries(session: AsyncSession, start: str, end: str, period: str = "all") -> dict:
     overrides = PERIOD_QUERY_OVERRIDES.get(period, {})
     
+    EXCLUDE = {"user_messages", "users_with_stats"}
+ 
     return {
         key: await run_query(session, overrides.get(key, key), start, end)
         for key in QUERIES
-        if not key.endswith("_hourly")
+        if not key.endswith("_hourly") and key not in EXCLUDE
     }
